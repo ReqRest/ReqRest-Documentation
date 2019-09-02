@@ -31,3 +31,9 @@ afterwards.
 > source code of the [ReqRest](https://github.com/manuelroemer/ReqRest-Documentation) repository,
 > because it requires changing the XML comments.
 > Note that any of these changes require a new release of the libraries to appear in the documentation.
+
+
+## Acknowledgments
+
+Thanks to [Oscar Vásquez](https://github.com/ovasquez) for creating the
+[DocFX Material Theme](https://github.com/ovasquez/docfx-material)!
