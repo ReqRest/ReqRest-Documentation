@@ -66,14 +66,14 @@
     "noLangKeyword": false,
     "keepFileLink": false,
     "cleanupCacheHistory": false,
-    "disableGitFeatures": false,
+    "disableGitFeatures": true,
     "globalMetadata": {
       "_appTitle": "ReqRest",
-      "_appFooter": "Copyright &copy; 2019 ReqRest - Generated with <a href=\"https://github.com/dotnet/docfx\">DocFx</a> - <a href=\"https://github.com/ovasquez/docfx-material/\">Material Theme</a> made by <a href=\"https://github.com/ovasquez\">Oscar Vásquez</a> - <a href=\"https://gist.github.com/manuelroemer/2aa8fc4e377874ae93dbd26e779cdbf6\">Impressum (Imprint)</a>",
+      "_appFooter": "Copyright &copy; 2019 ReqRest - Generated with <a href=\"https://github.com/dotnet/docfx\">DocFX</a> - <a href=\"https://github.com/ovasquez/docfx-material/\">Material Theme</a> made by <a href=\"https://github.com/ovasquez\">Oscar Vásquez</a> - <a href=\"https://gist.github.com/manuelroemer/2aa8fc4e377874ae93dbd26e779cdbf6\">Impressum (Imprint)</a>",
       "_disableContribution": true,
       "_gitContribute": {
-        "repo": "https://github.com/manuelroemer/ReqRest",
-        "branch": "dev"
+        "repo": "https://github.com/manuelroemer/ReqRest-Documentation",
+        "branch": "master"
       },
       "_gitUrlPattern": "github"
     }
