@@ -1,4 +1,4 @@
-# ReqRest Documentation
+# ReqRest Documentation [![Build Status](https://dev.azure.com/ManuelRoemer/ReqRest/_apis/build/status/ReqRest%20Documentation?branchName=master)](https://dev.azure.com/ManuelRoemer/ReqRest/_build/latest?definitionId=16&branchName=master)
 
 This repository hosts the documentation for the [ReqRest](https://github.com/manuelroemer/ReqRest) 
 libraries.
