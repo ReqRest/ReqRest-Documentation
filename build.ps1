@@ -11,8 +11,11 @@ Set-Location ReqRest
 git checkout master
 git pull
 
+Set-Location src
+dotnet restore
 
-Set-Location ../doc
+
+Set-Location ../../doc
 
 # Clean any potentially left over files from a recent build.
 # DocFX should automatically do this, but let's be safe.
