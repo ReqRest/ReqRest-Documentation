@@ -18,6 +18,35 @@ This means that the documentation can be updated when both manually written cont
 repository and when the ReqRest APIs get updated.
 
 
+## Building locally
+
+You can locally build the documentation via the `build.ps1` script.
+Be aware that it is written with the CI system in mind, so you will have to ensure
+that the requirements are met.
+
+You will have to:
+
+* install [DocFX](https://github.com/dotnet/docfx).
+* initialize the ReqRest submodule: `git submodule init`,  `git submodule update`.
+* launch the script from the repository's root directory.
+
+
+## Known Problems
+
+There are some known problems with the documentation which unfortunately cannot be fixed
+(at least I didn't find a way - if you have a solution, please notify me!).
+
+### Some auto-generated methods don't have any comments/descriptions.
+  
+**Reason:** These are usually documented with the `<inheritdoc cref="foo" />` tag. DocFX doesn't
+support generating the correct documentation for these.
+
+
+### Some auto-generated members are listed as `Nullable<...>`, even though they are reference types.
+
+**Reason:** DocFX doesn't correctly handle Nullable Reference Types of C# 8.0. 
+
+
 ## Contributing
 
 Contributions to the documentation are welcome!

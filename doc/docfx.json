@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "src": "../src",
+          "src": "../ReqRest/src",
           "files": ["**/*.csproj"],
           "exclude": [
             "**/*Test*/**",
@@ -36,17 +36,6 @@
       {
         "files": [
           "assets/**"
-        ]
-      }
-    ],
-    "overwrite": [
-      {
-        "files": [
-          "apidoc/**.md"
-        ],
-        "exclude": [
-          "obj/**",
-          "_site/**"
         ]
       }
     ],

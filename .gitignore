@@ -4,5 +4,5 @@ packages/
 bin/
 obj/
 _site/
-api/*.yml
-api/.manifest
+doc/api/*.yml
+doc/api/.manifest
