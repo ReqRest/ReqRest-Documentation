@@ -1,0 +1,11 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- script: |
+    git submodule init
+    git submodule update
+  displayName: Initialize submodule
