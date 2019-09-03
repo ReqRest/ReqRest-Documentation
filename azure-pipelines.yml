@@ -9,3 +9,8 @@ steps:
     git submodule init
     git submodule update
   displayName: Initialize submodule
+- task: PowerShell@2
+  displayName: Build
+  inputs:
+    filePath: 'build.ps1'
+    failOnStderr: true
