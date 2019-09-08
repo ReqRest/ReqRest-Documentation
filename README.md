@@ -5,6 +5,8 @@ libraries.
 The documentation is built using [DocFX](https://github.com/dotnet/docfx) and thus consists of
 both manually written and automatically generated content.
 
+**View the documentation at [https://manuelroemer.github.io/ReqRest-Documentation](https://manuelroemer.github.io/ReqRest-Documentation).**
+
 
 ## Build Process
 
