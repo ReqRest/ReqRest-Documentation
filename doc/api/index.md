@@ -1,3 +1,7 @@
+---
+uid: api
+---
+
 # API Documentation
 
 Welcome to the ReqRest API Browser.
