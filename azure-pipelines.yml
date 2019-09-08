@@ -17,3 +17,10 @@ steps:
   displayName: Build
   inputs:
     filePath: 'build.ps1'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish _site artifact'
+  inputs:
+    PathtoPublish: 'doc/_site'
+    ArtifactName: 'Site'
+    publishLocation: 'Container'
