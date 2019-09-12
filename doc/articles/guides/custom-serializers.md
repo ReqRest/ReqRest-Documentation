@@ -35,9 +35,10 @@ public interface IHttpContentDeserializer
 }
 ```
 
-Since ReqRest is just supposed to be a wrapper around .NET's `HttpClient` API, all that it
-cares about is how an object can be converted to and from an `HttpContent`, because both the
-`HttpRequestMessage` and `HttpResponseMessage` store their body as an `HttpContent` instance.
+Since ReqRest is just supposed to be a wrapper around .NET's @"System.Net.Http.HttpClient" API, all
+that it cares about is how an object can be converted to and from an @"System.Net.Http.HttpContent",
+because both the @"System.Net.Http.HttpRequestMessage" and @"System.Net.Http.HttpResponseMessage"
+store their body as an @"System.Net.Http.HttpContent" instance.
 
 
 ## Serializer Checklist
