@@ -49,7 +49,7 @@ every generic serializer should support:
 * It should be able to correctly (de-)serialize the special @"ReqRest.Serializers.NoContent" type.
   This type represents an empty HTTP content and is supposed to be used when an API returns no content
   (for example after deleting a resource).
-* Serializers should throw a @"ReqRest.Serializers.HttpContentSerializationException"
+* Serializers should throw an @"ReqRest.Serializers.HttpContentSerializationException"
   when the (de-)serialization fails.
   This should be done so that users of the library only have to catch a single exception type without
   having to worry about what deserializing an API response may throw.
