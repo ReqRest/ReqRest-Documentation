@@ -1,3 +1,3 @@
 [submodule "ReqRest"]
 	path = ReqRest
-	url = https://github.com/manuelroemer/ReqRest.git
+	url = https://github.com/ReqRest/ReqRest.git
