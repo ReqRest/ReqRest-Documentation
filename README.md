@@ -1,11 +1,11 @@
 # ReqRest Documentation [![Build Status](https://dev.azure.com/ManuelRoemer/ReqRest/_apis/build/status/ReqRest%20Documentation?branchName=master)](https://dev.azure.com/ManuelRoemer/ReqRest/_build/latest?definitionId=16&branchName=master)
 
-This repository hosts the documentation for the [ReqRest](https://github.com/manuelroemer/ReqRest) 
+This repository hosts the documentation for the [ReqRest](https://github.com/ReqRest/ReqRest) 
 libraries.
 The documentation is built using [DocFX](https://github.com/dotnet/docfx) and thus consists of
 both manually written and automatically generated content.
 
-**View the documentation at [https://manuelroemer.github.io/ReqRest-Documentation](https://manuelroemer.github.io/ReqRest-Documentation).**
+**View the documentation at [https://reqrest.github.io](https://reqrest.github.io).**
 
 
 ## Build Process
@@ -13,7 +13,7 @@ both manually written and automatically generated content.
 The documentation is automatically built whenever
 
 * a push to `master` is made in this repository.
-* a new release is triggered from the [ReqRest](https://github.com/manuelroemer/ReqRest)
+* a new release is triggered from the [ReqRest](https://github.com/ReqRest/ReqRest)
   repository (i.e. if a push to `master` is made and the triggered build of the libraries succeeds).
 
 This means that the documentation can be updated when both manually written content is updated in this
@@ -54,12 +54,12 @@ support generating the correct documentation for these.
 Contributions to the documentation are welcome!
 
 If you notice any mistakes, be it typos, outdated content or simply wrongly written sections, feel
-free to either [create an issue](https://github.com/manuelroemer/ReqRest-Documentation/issues/new)
-or simply fix the problem yourself and [create a pull request](https://github.com/manuelroemer/ReqRest-Documentation/compare)
+free to either [create an issue](https://github.com/ReqRest/ReqRest-Documentation/issues/new)
+or simply fix the problem yourself and [create a pull request](https://github.com/ReqRest/ReqRest-Documentation/compare)
 afterwards.
 
 > **Note:** Any modifications in the automatically generated API documentation must be done in the
-> source code of the [ReqRest](https://github.com/manuelroemer/ReqRest) repository,
+> source code of the [ReqRest](https://github.com/ReqRest/ReqRest) repository,
 > because it requires changing the XML comments.
 > Note that any of these changes require a new release of the libraries to appear in the documentation.
 
