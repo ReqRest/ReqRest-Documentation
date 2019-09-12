@@ -25,6 +25,6 @@ Remove-Item api/.manifest  -ErrorAction Ignore
 Remove-Item api/*.yml      -ErrorAction Ignore
 
 docfx metadata -f
-docfx build
+docfx build --serve
 
 Set-Location ..
