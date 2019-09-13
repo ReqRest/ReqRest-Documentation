@@ -46,7 +46,7 @@ store their body as an @"System.Net.Http.HttpContent" instance.
 While the serialization interfaces above are rather trivial, there are a few points that nearly
 every generic serializer should support:
 
-* It should be able to correctly (de-)serialize the special @"ReqRest.Serializers.NoContent" type.
+* It should be able to correctly (de-)serialize the special @"ReqRest.Http.NoContent" type.
   This type represents an empty HTTP content and is supposed to be used when an API returns no content
   (for example after deleting a resource).
 * Serializers should throw an @"ReqRest.Serializers.HttpContentSerializationException"
@@ -137,7 +137,7 @@ public class MyXmlHttpContentSerializer : IHttpContentSerializer, IHttpContentDe
 Congratulations! You have just created your first custom serializer.
 When looking at the code above, you may notice that there is a lot of boilerplate in there.
 Most passages are universal to any kind of serializer, for example the exception and
-@"ReqRest.Serializers.NoContent" handling.
+@"ReqRest.Http.NoContent" handling.
 For this reason, ReqRest provides you with the abstract 
 @"ReqRest.Serializers.HttpContentSerializer" class which, when inherited
 from, already takes care of most of these tasks.
@@ -181,7 +181,7 @@ public class MyXmlSerializer : HttpContentSerializer
 As you can see, the required code got reduced by quite a bit, because the
 @"ReqRest.Serializers.HttpContentSerializer" already takes care of
 
-* handling @"ReqRest.Serializers.NoContent",
+* handling @"ReqRest.Http.NoContent",
 * handling serialization exceptions,
 * using the default `UTF8` encoding, if no special encoding is given
 * and finally, basic parameter validation.
