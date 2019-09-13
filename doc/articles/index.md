@@ -1,3 +1,7 @@
+---
+uid: articles
+---
+
 # Articles
 
 Welcome to the articles section.

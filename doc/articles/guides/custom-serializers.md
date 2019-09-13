@@ -2,7 +2,7 @@
 uid: guides_custom_serializers
 ---
 
-# How to: Implementing Custom Serializers
+# How to: Implement Custom Serializers
 
 ## Introduction
 

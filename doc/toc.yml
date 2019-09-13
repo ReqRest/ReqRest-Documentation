@@ -1,7 +1,7 @@
 - name: Getting Started
-  href: articles/getting-started/
+  href: articles/getting-started.md
 - name: Guides
-  href: articles/guides/
+  href: articles/guides/index.md
 - name: API Documentation
   href: api/
   homepage: api/

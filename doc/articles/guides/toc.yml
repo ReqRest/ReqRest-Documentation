@@ -1,2 +1,3 @@
-- name: 'How to: Implementing Custom Serializers'
+- href: index.md
+- name: 'How to: Implement Custom Serializers'
   href: custom-serializers.md

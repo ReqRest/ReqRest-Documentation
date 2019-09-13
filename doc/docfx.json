@@ -45,7 +45,8 @@
     "template": [
       "default",
       "templates/condensed",
-      "templates/material"
+      "templates/material",
+      "templates/ReqRest"
     ],
     "xrefService": [
       "https://xref.docs.microsoft.com/query?uid={uid}"
@@ -57,6 +58,7 @@
     "cleanupCacheHistory": false,
     "disableGitFeatures": true,
     "globalMetadata": {
+      "_appName": "ReqRest",
       "_appTitle": "ReqRest",
       "_appFooter": "Copyright &copy; 2019 ReqRest - Generated with <a href=\"https://github.com/dotnet/docfx\">DocFX</a> - <a href=\"https://github.com/ovasquez/docfx-material/\">Material Theme</a> made by <a href=\"https://github.com/ovasquez\">Oscar Vásquez</a> - <a href=\"https://gist.github.com/manuelroemer/2aa8fc4e377874ae93dbd26e779cdbf6\">Impressum (Imprint)</a>",
       "_disableContribution": true,
