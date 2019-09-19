@@ -174,7 +174,7 @@ A @"ReqRest.RestInterface" has two purposes:
 * It builds the URL of the API interface against which requests are made.
 * It defines methods for creating the possible requests against that API interface.
 
-Every class which inherits from @"ReqRest.RestInterface" will contain code similar to this:
+Every class inheriting from @"ReqRest.RestInterface" will contain code similar to this:
 
 ```csharp
 using ReqRest;
@@ -247,7 +247,7 @@ Nontheless, the steps above are explained here:
   user interacts with the API's response.
 * **`BuildRequest()`:** <br/>
   The [RestInterface.BuildRequest()](xref:ReqRest.RestInterface.BuildRequest) returns a new
-  @"ReqRest.RestInterface" instance and sets the [RequestUri](xref:ReqRest.Builders.HttpRequestMessageBuilder.RequestUri)
+  @"ReqRest.ApiRequest" instance and sets the [RequestUri](xref:ReqRest.Builders.HttpRequestMessageBuilder.RequestUri)
   which gets returned by the @"ReqRest.RestInterface.BuildUrl(ReqRest.Builders.UrlBuilder)" method above. <br/>
 * **`Get()`:** <br/>
   [Get()](xref:ReqRest.Builders.HttpMethodBuilderExtensions.Get``1(``0)) changes the request's HTTP method to `GET`.
@@ -312,10 +312,9 @@ public static async Task Main(string[] args)
 
 ## Creating the `TodoInterface`
 
-The next interface to be created is the `/todos/{id}` interface for interacting with a single
-`TodoItem`.
-
-This works similarly to the creation of the `TodosInterface`, but has a few twists:
+Right now, only the `TodoInterface` for the `/todos/{id}` endpoint is missing.
+Creating this interface works similarly to the `TodosInterface`, but with one important difference:
+the ID must somehow be transported into the URL.
 
 ```csharp
 using ReqRest;
@@ -346,12 +345,7 @@ public sealed class TodoInterface : RestInterface
             .PutJson(todoItem)
             .Receive<TodoItem>().AsJson(200);
 
-    // This is a little bit special.
-    // The JSON Placeholder API returns an empty object {} when a DELETE request succeeds. 
-    //
-    // For demonstration purposes, this code interprets this as 'NoContent'.
-    // Normally, NoContent should be used when a request returns an empty HTTP content
-    // (which is also typical for a DELETE request).
+    // The REST API returns {} here, but for demonstration purposes, this is treated as No Content.
     public ApiRequest<NoContent> Delete() =>
         BuildRequest()
             .Delete()
@@ -412,7 +406,7 @@ ReqRest! Even though it is not complete yet, you can already use it to interact 
 
 Feel free to go ahead and try it out by making some requests and see how it works.
 
-To show a concrete (and more complex) example of how it can be used, the following code section
+<!-- To show a concrete (and more complex) example of how it can be used, the following code section
 displays a way to delete all items with an ID smaller than 10.
 This example shows how you can use both ReqRest's response type matching and the plain, old
 status code checking. 
@@ -477,7 +471,7 @@ static async Task DeleteItem(JsonPlaceholderClient client, TodoItem item)
     // All in all, ReqRest gives you a lot of options to get your task done.
     // It is up to you to choose which flavor you prefer for which scenario.
 }
-```
+``` -->
 
 
 ## Next Steps
