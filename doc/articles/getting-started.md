@@ -28,21 +28,26 @@ Towards the end of this article, the API client will be able to interact with th
 By using the final client, a user will be able to interact with the API using code similar to this:
 
 ```csharp
-JsonPlaceholderClient client = new JsonPlaceholderClient();
+var client = new JsonPlaceholderClient();
 
-// Get the TodoItem with the ID 1.
-var (response, resource) = await client.Todos(1).Get().FetchAsync();
-resource.Match(
-    item => Console.WriteLine($"Task: {item.Title}."),
-    ()   => Console.WriteLine($"Unexpected status code: {response.StatusCode}.")
-);
+// For the /todos endpoint:
+client.Todos().Get();
+client.Todos().Post(new TodoItem() { Title = "Post something" });
 
+// For the /todos/{id} endpoint:
+client.Todos(1).Get();
+client.Todos(2).Put(new TodoItem() { Title = "Update something" });
+client.Todos(3).Delete();
+
+// Note:
+// The lines above compile, but are more or less useless, because the created requests aren't being sent.
+// This is just for demonstration of what the client is capable of.
 ```
 
-> [!NOTE]
-> This guide will make use of new language features introduced with C# 8.0, namely Nullable
-> Reference Types. If your current development environment doesn't support C# 8.0, simply
-> ignore every `?` behind a reference type in the code below.
+Furthermore, REST clients written with ReqRest are fully typed which means that you will get full
+IntelliSense and compiler support:
+
+![JsonPlaceholderClient IntelliSense Support](../assets/getting-started/JsonPlaceholderClientIntelliSenseSupport.png)
 
 
 ## Installation and Project Setup 
@@ -82,10 +87,15 @@ public class TodoItem
 ## Creating the `JsonPlaceholderClient`
 
 Independent of what API you are wrapping, you will always have to create a class which inherits
-from the @"ReqRest.RestClient" class. Such a client is the entry point for creating requests
-against the REST API.
+from @"ReqRest.RestClient". 
+A `RestClient` class is the main entry point for users which want to interact with the REST API.
+With such a client, users can start building requests against the API via method chains, for example
+`myClient.Users(123).Todos().Post(newTodoItem)`.
+Futhermore, a `RestClient` holds the configuration for the requests which are being made, for example
+the API's base URL (in our case `https://jsonplaceholder.typicode.com`) or the `HttpClient` which
+should be used for making the requests.
 
-Create a new class called `JsonPlaceholderClient`, inherit from the @"ReqRest.RestClient" class
+For this example, create a new class called `JsonPlaceholderClient`, inherit from @"ReqRest.RestClient"
 and copy the code below.
 
 ```csharp
@@ -106,16 +116,17 @@ public sealed class JsonPlaceholderClient : RestClient
 
 As you can see, any @"ReqRest.RestClient" must be configured with a @"ReqRest.RestClientConfiguration".
 This configuration holds several important values with the most important one being the
-@"ReqRest.RestClientConfiguration.BaseUrl". This URL is later on combined with the paths of the
-API endpoints, e.g. `"/todos"`.
+@"ReqRest.RestClientConfiguration.BaseUrl". This base URL is used by ReqRest to build the final URL
+of a request. For example, the code `client.Todos()` combines the base URL above with `"/todos"`,
+resulting in the final URL `https://jsonplaceholder.typicode.com/todos` for the request.
 
 > [!TIP]
 > It is recommended to follow the example above and make the @"ReqRest.RestClientConfiguration"
 > an optional constructor parameter so that a user **can** pass in a custom configuration, but
 > **doesn't have** to.
 
-By now, the client can already be instantiated, but it cannot really do anything. As a next step,
-it will be extended with support for the `/todos` interface, so that code like 
+Right now, the client can already be instantiated, but it cannot really do anything else.
+As a next step, it will be extended with support for the `/todos` interface, so that code like 
 `client.Todos().[...]` becomes possible.
 
 
@@ -145,6 +156,8 @@ with a single item).
 
 If this sounds complicated, don't be afraid! The code following below will help a lot to understand
 this API design.
+
+![JsonPlaceholderClient UML](../assets/getting-started/JsonPlaceholderClientUML.png)
 
 
 ## Creating the `TodosInterface`
