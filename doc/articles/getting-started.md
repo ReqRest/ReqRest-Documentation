@@ -92,8 +92,8 @@ A `RestClient` class is the main entry point for users which want to interact wi
 With such a client, users can start building requests against the API via method chains, for example
 `myClient.Users(123).Todos().Post(newTodoItem)`.
 Futhermore, a `RestClient` holds the configuration for the requests which are being made, for example
-the API's base URL (in our case `https://jsonplaceholder.typicode.com`) or the `HttpClient` which
-should be used for making the requests.
+the API's base URL (in our case `https://jsonplaceholder.typicode.com`) or the @"System.Net.Http.HttpClient"
+which should be used for making the requests.
 
 For this example, create a new class called `JsonPlaceholderClient`, inherit from @"ReqRest.RestClient"
 and copy the code below.
@@ -130,39 +130,51 @@ As a next step, it will be extended with support for the `/todos` interface, so 
 `client.Todos().[...]` becomes possible.
 
 
-## About REST API Interfaces
+## How ReqRest deals with API endpoints
 
-ReqRest uses the @"ReqRest.RestInterface" class to group requests to the same endpoint.
-At this point, it makes sense to have a look at which requests the JSON Placeholder API supports
-for the `TodoItem` resource.
+Before any functionality is added to the `JsonPlaceholderClient`, it makes sense to talk about
+what the REST API actually looks like and how ReqRest can be used to project it into C#.
 
-| Endpoint      | HTTP Method | Result       |
-|-------------- | ----------- | ------------ |
-| `/todos`      | `GET`       | `TodoItem[]` |
-|               | `POST`      | `TodoItem`   |
-| `/todos/{id}` | `GET`       | `TodoItem`   |
-|               | `PUT`       | `TodoItem`   |
-|               | `DELETE`    | `{ }`        |
+The JsonPlaceholder API has the following endpoints and behavior:
+
+| Endpoint      | HTTP Method | Status Code and JSON Result                                      |
+|-------------- | ----------- | ---------------------------------------------------------------- |
+| `/todos`      | `GET`       | `200`: `TodoItem[]`                                              |
+|               | `POST`      | `201`: `TodoItem`                                                |
+| `/todos/{id}` | `GET`       | `200`: `TodoItem`                                                |
+|               | `PUT`       | `200`: `TodoItem`                                                |
+|               | `DELETE`    | `200`: `{ }` _(treated as No Content for demonstration purposes)_|
 
 You can see that the `/todos` and `/todos/{id}` endpoints basically form two separate groups with
-separate, possible requests.
-ReqRest models these two groups via the aforementioned @"ReqRest.RestInterface" class. Each group
-gets projected to a single class deriving from @"ReqRest.RestInterface" which then exposes the
-methods for creating the different requests which can be made against that interface.
+different URLs and requests, even though they share the same name (`todos`).
 
-In this case, the two classes will be called `TodosInterface` (for `/todos`, because this interface
-deals with multiple items) and `TodoInterface` (for `/todos/{id}`, because this interface deals
-with a single item).
-
-If this sounds complicated, don't be afraid! The code following below will help a lot to understand
-this API design.
+ReqRest uses this fact and allows modeling these two groups via two different classes.
+To be more concrete, the endpoints from above can be modeled and integrated into the `JsonPlaceholderClient`
+like this:
 
 ![JsonPlaceholderClient UML](../assets/getting-started/JsonPlaceholderClientUML.png)
+
+As you can see in the image, the table from above can easily be translated into two classes
+which provide methods for creating the requests that can be made against the specific endpoint.
+Additionally, the `JsonPlaceholderClient` is extended with two methods that both return an instance of
+each `...Interface` class. This instance can then be used to create the appropriate requests.
+
+With the constellation above, it is possible to write code like `client.Todos().Get()` or
+`client.Todos(123).Delete()`.
+ReqRest then takes over and translates these method calls into valid HTTP requests (with your help).
+In the following sections, you can see how these `...Interface` classes are written.
 
 
 ## Creating the `TodosInterface`
 
-Every class inheriting from @"ReqRest.RestInterface" requires at least the following code:
+Whenever you want to wrap an endpoint with ReqRest, you will have to create a class which inherits
+from @"ReqRest.RestInterface".
+A @"ReqRest.RestInterface" has two purposes:
+
+* It builds the URL of the API interface against which requests are made.
+* It defines methods for creating the possible requests against that API interface.
+
+Every class which inherits from @"ReqRest.RestInterface" will contain code similar to this:
 
 ```csharp
 using ReqRest;
@@ -173,25 +185,24 @@ public sealed class TodosInterface : RestInterface
     internal TodosInterface(RestClient restClient)
         : base(restClient) { }
 
-    // Every RestInterface is responsible of building up the URL which is ultimately going 
     protected override UrlBuilder BuildUrl(UrlBuilder baseUrl) =>
         baseUrl / "todos";
 }
 ```
 
-Two things are happening here:
+Two important things are happening here:
 
-First of all, the `TodosInterface` expects a @"ReqRest.RestClient" instance which immediately gets
-passed to the base class. This client is required by the interface, because it needs to read out
-certain values from the client's configuration, e.g. the @"ReqRest.RestClientConfiguration.BaseUrl".
+First of all, the @"ReqRest.RestInterface" expects a @"ReqRest.RestClient" instance in the constructor.
+ReqRest uses this client to read out the configured @"ReqRest.RestClientConfiguration.BaseUrl".
 
 In addition, every class inheriting from @"ReqRest.RestInterface" must override the 
-@"ReqRest.RestInterface.BuildUrl(ReqRest.Builders.UrlBuilder)" method. This method is used by
-ReqRest to build up the final URL for a request against this interface.
-As you can see, the `TodosInterface` appends the `"todos"` string to a given `baseUrl`.
-In this example, `baseUrl` will always come directly from the `JsonPlaceholderClient` which means
-that is is going to be `https://jsonplaceholder.typicode.com`.
-The `BuildUrl` method above transforms this URL to `https://jsonplaceholder.typicode.com/todos`.
+@"ReqRest.RestInterface.BuildUrl(ReqRest.Builders.UrlBuilder)" method.
+Every request which is created using this interface class will be made against the URL which is built
+in this method. <br/>
+As you can see in the code above, the method receives a single parameter, the `baseUrl`.
+In this example, the `baseUrl` comes straight from the `JsonPlaceholderClient` and is thus
+`https://jsonplaceholder.typicode.com`. The `TodosInterface` then appends the `"todos"` string which
+leads to the final URL `https://jsonplaceholder.typicode.com/todos`.
 
 > [!NOTE]
 > The slash in `baseUrl / "todos"` is syntactic sugar replacing the @"ReqRest.Builders.UriBuilderExtensions.AppendPath*"
@@ -199,24 +210,8 @@ The `BuildUrl` method above transforms this URL to `https://jsonplaceholder.typi
 > the slashes. This works similar to .NET's [Path.Combine(string, string)](xref:System.IO.Path.Combine(System.String,System.String))
 > method.
 
-At this point, the `TodosInterface` can be instantiated and thus integrated into the `JsonPlaceholderClient`:
-
-```csharp
-using System;
-using ReqRest;
-
-public sealed class JsonPlaceholderClient : RestClient
-{
-    // [...]
-
-    public TodosInterface Todos() =>
-        new TodosInterface(this);
-}
-```
-
-Now you can write code like `new JsonPlaceholderClient().Todos()`, but there is no possibility
-to create any requests with this interface (for example via a `Get()` method).
-This is going to change now! Add the `Get()` method below to the `TodosInterface`.
+Now that the class has been created, it can be extended with the `Get()` and `Post(TodoItem todoItem)`
+methods which actually create requests that the user can make:
 
 ```csharp
 using System.Collections.Generic;
@@ -232,19 +227,71 @@ public sealed class TodosInterface : RestInterface
         BuildRequest()
             .Get()
             .Receive<IList<TodoItem>>().AsJson(forStatusCodes: 200);
+    
+    public ApiRequest<TodoItem> Post(TodoItem? todoItem) =>
+        BuildRequest()
+            .PostJson(todoItem)
+            .Receive<TodoItem>().AsJson(forStatusCodes: 201);
 }
 ```
 
-Again, a lot is happening here, but ideally the code speaks for itself.
+This is - hopefully - the part where ReqRest really starts to shine, because ideally, the code is
+self explanatory.
 
-`Get()` calls the @"ReqRest.RestInterface.BuildRequest" method and afterwards calls a few methods
-to declare that the request uses the `GET` HTTP method and will receive a list of `TodoItem`s 
-as JSON if the server sends back a response with the status code `200`.
+Nontheless, the steps above are explained here:
 
-Don't be afraid to use IntelliSense and Visual Studio to see the documentation of the called
-methods above. They will explain in detail what they do exactly.
+* **`ApiRequest<IList<TodoItem>>` and `ApiRequest<TodoItem>`:** <br/>
+  The @"ReqRest.ApiRequest`1" class is nothing else but a decorator around .NET's @"System.Net.Http.HttpRequestMessage"
+  class. An important detail is the type parameter. It allows you to declare exactly which .NET type may
+  be returned by the REST API if this request gets sent. This adds type safety later on, when the
+  user interacts with the API's response.
+* **`BuildRequest()`:** <br/>
+  The [RestInterface.BuildRequest()](xref:ReqRest.RestInterface.BuildRequest) returns a new
+  @"ReqRest.RestInterface" instance and sets the [RequestUri](xref:ReqRest.Builders.HttpRequestMessageBuilder.RequestUri)
+  which gets returned by the @"ReqRest.RestInterface.BuildUrl(ReqRest.Builders.UrlBuilder)" method above. <br/>
+* **`Get()`:** <br/>
+  [Get()](xref:ReqRest.Builders.HttpMethodBuilderExtensions.Get``1(``0)) changes the request's HTTP method to `GET`.
+* **`Receive<IList<TodoItem>>().AsJson(forStatusCodes: 200)`:** <br/>
+  @"ReqRest.ApiRequest.Receive``1" _upgrades_ the @"ReqRest.ApiRequest" into an @"ReqRest.ApiRequest`1",
+  i.e. it adds compile-time information that a response to this HTTP request may have a body which can
+  be deserialized into an `IList<TodoItem>`. <br/>
+  [AsJson(params StatusCodeRange[] forStatusCodes)](xref:ReqRest.Serializers.NewtonsoftJson.JsonResponseTypeInfoBuilderExtensions.AsJson``1(ReqRest.ResponseTypeInfoBuilder{``0},ReqRest.Http.StatusCodeRange[]))
+  declares that this `IList<TodoItem>` can only be received if the status code is `200` and that the
+  body should be deserialized from JSON.
+* **`PostJson(todoItem)`:** <br/>
+  [PostJson(object? content)](xref:ReqRest.Serializers.NewtonsoftJson.JsonHttpMethodBuilderExtensions.PostJson``1(``0,System.Nullable{System.Object},System.Nullable{System.Text.Encoding},System.Nullable{ReqRest.Serializers.NewtonsoftJson.JsonHttpContentSerializer}))
+  changes the HTTP method to `POST` and sets the request's HTTP content to the JSON representation of
+  the specified `todoItem`.
 
-At this point, the API client is functional for the first time! Go ahead and try it out:
+There are a lot of additional methods which can help you to build the exact HTTP request that you
+want. In fact, you can change every single property that .NET's @"System.Net.Http.HttpRequestMessage"
+provides - and many more. <br/>
+Feel free to explore the available methods using IntelliSense:
+
+![Request Building with the help of IntelliSense](../assets/getting-started/RequestBuildingIntelliSense.png)
+
+Now that the methods have been added, the only thing left to do is to integrate the `TodosInterface`
+into the `JsonPlaceholderClient`:
+
+```csharp
+using System;
+using ReqRest;
+
+public sealed class JsonPlaceholderClient : RestClient
+{
+    // [...]
+
+    public TodosInterface Todos() =>
+        new TodosInterface(this);
+}
+```
+
+At this point, the `TodosInterface` is entirely done. You can try it out with the code below!
+In this example, you can already see the advantage of declaring what the API returns for which
+status code - ReqRest does the entire deserialization and status code matching for you.
+
+Don't worry too much if you don't understand this example in its entirety. There is an entire
+other guide which explains how you can actually **use** a client written with ReqRest.
 
 ```csharp
 public static async Task Main(string[] args)
@@ -261,57 +308,6 @@ public static async Task Main(string[] args)
     );
 }
 ```
-
-In the table above, you can see that there is another request that can be made to the API - the
-`POST /todos` request. There is one important difference to the `GET` request above. When making a
-`POST` request, it should be possible to pass the data, i.e. the `TodoItem` to the request.
-
-In the code, this can easily done via a parameter. This means that the `TodosInterface` can be
-extended like this:
-
-```csharp
-using System.Collections.Generic;
-using ReqRest;
-using ReqRest.Builders;
-using ReqRest.Serializers.NewtonsoftJson;
-
-public sealed class TodosInterface : RestInterface
-{
-    // [...]
-
-    public ApiRequest<TodoItem> Post(TodoItem? todoItem) =>
-        BuildRequest()
-            .PostJson(todoItem)
-            .Receive<TodoItem>().AsJson(forStatusCodes: 201);
-}
-```
-
-This new method can be used like this:
-
-```csharp
-public static async Task Main(string[] args)
-{
-    var client = new JsonPlaceholderClient();
-    var itemToPost = new TodoItem() { Title = "Try out the new POST method!" };
-    var (response, resource) = await client.Todos().Post(itemToPost).FetchAsync();
-
-    resource.Match(
-        createdItem => Console.WriteLine($"Created the item. It has the ID {createdItem.Id}."),
-        ()          => Console.WriteLine($"POSTing failed with status code: {response.StatusCode}.")
-    );
-}
-```
-
-> [!NOTE]
-> The `FetchAsync()` method in the example above is nothing else but a shortcut for the following:
->
-> ```csharp
-> var response = await client.Todos().Post(itemToPost).FetchResponseAsync();
-> var resource = await response.DeserializeResponseAsync();
-> ```
-
-At this point, the `TodosInterface` is entirely done. It is now possible to create and make every
-single request to the `/todos` endpoint using the `JsonPlaceholderClient`!
 
 
 ## Creating the `TodoInterface`
