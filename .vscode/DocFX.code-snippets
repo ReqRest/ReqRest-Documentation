@@ -1,0 +1,16 @@
+{
+  "Cross Reference": {
+    "prefix": "ref",
+    "body": [
+      "@\"$1\""
+    ],
+    "description": "A cross reference to another topic which uses that topic's title."
+  },
+  "Named Cross Reference": {
+    "prefix": "nref",
+    "body": [
+      "[$1](xref:$2)"
+    ],
+    "description": "A cross reference to another topic with an explicitly defined name."
+  }
+}
