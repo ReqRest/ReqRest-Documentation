@@ -1,5 +1,5 @@
 ---
-uid: guides_custom_serializers
+uid: guides_custom-serializers
 ---
 
 # How to: Implement Custom Serializers

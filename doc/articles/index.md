@@ -4,7 +4,7 @@ uid: articles
 
 # Articles
 
-Welcome to the articles section.
-There are a lot of articles describing the usage of the ReqRest libraries.
+Welcome to the articles!
+Articles guide you through how the ReqRest libraries can be used.
 
-Please use the sidebar to the left to navigate through the available categories.
+Please use the sidebar to navigate through the available categories.

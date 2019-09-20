@@ -1,2 +1,4 @@
+- name: Getting Started
+  href: getting-started/index.md
 - name: Guides
   href: guides/index.md

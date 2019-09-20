@@ -10,7 +10,7 @@ Learn more about ReqRest at the [GitHub page](https://github.com/ReqRest/ReqRest
 
 The documentation consists of multiple parts which are linked below.
 
-### [🏃 Getting Started](xref:getting_started)
+### [🏃 Getting Started](xref:getting-started)
 
 A guide which helps you to get familiar with the core API of ReqRest.
 This guide demonstrates the most important features by walking you through the creation

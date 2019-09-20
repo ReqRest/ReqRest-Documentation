@@ -1,8 +1,8 @@
 ---
-uid: getting_started
+uid: getting-started_building-an-api-client
 ---
 
-# Getting Started
+# Building an API Client
 
 ## Introduction
 
@@ -47,7 +47,7 @@ client.Todos(3).Delete();
 Furthermore, REST clients written with ReqRest are fully typed which means that you will get full
 IntelliSense and compiler support:
 
-![JsonPlaceholderClient IntelliSense Support](../assets/getting-started/JsonPlaceholderClientIntelliSenseSupport.png)
+![JsonPlaceholderClient IntelliSense Support](../../assets/getting-started/JsonPlaceholderClientIntelliSenseSupport.png)
 
 
 ## Installation and Project Setup 
@@ -152,7 +152,7 @@ ReqRest uses this fact and allows modeling these two groups via two different cl
 To be more concrete, the endpoints from above can be modeled and integrated into the `JsonPlaceholderClient`
 like this:
 
-![JsonPlaceholderClient UML](../assets/getting-started/JsonPlaceholderClientUML.png)
+![JsonPlaceholderClient UML](../../assets/getting-started/JsonPlaceholderClientUML.png)
 
 As you can see in the image, the table from above can easily be translated into two classes
 which provide methods for creating the requests that can be made against the specific endpoint.
@@ -268,7 +268,7 @@ want. In fact, you can change every single property that .NET's @"System.Net.Htt
 provides - and many more. <br/>
 Feel free to explore the available methods using IntelliSense:
 
-![Request Building with the help of IntelliSense](../assets/getting-started/RequestBuildingIntelliSense.png)
+![Request Building with the help of IntelliSense](../../assets/getting-started/RequestBuildingIntelliSense.png)
 
 Now that the methods have been added, the only thing left to do is to integrate the `TodosInterface`
 into the `JsonPlaceholderClient`:
@@ -301,7 +301,8 @@ public static async Task Main(string[] args)
     var resource = await response.DeserializeResourceAsync();
 
     // The API may not always return the status code 200.
-    // ReqRest automatically does the checking for you and calls the correct method depending on the actual status code.
+    // ReqRest automatically does the checking for you and calls the correct method depending on
+    // the actual status code.
     resource.Match(
         todoItems => Console.WriteLine($"Received status code 200. There are {todoItems.Count} items!"),
         ()        => Console.WriteLine($"Received an unexpected status code: {response.StatusCode}.")
@@ -345,7 +346,8 @@ public sealed class TodoInterface : RestInterface
             .PutJson(todoItem)
             .Receive<TodoItem>().AsJson(200);
 
-    // The REST API returns {} here, but for demonstration purposes, this is treated as No Content.
+    // The REST API returns {} here, but for demonstration purposes, this is treated
+    // as No Content.
     public ApiRequest<NoContent> Delete() =>
         BuildRequest()
             .Delete()

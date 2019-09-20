@@ -4,8 +4,8 @@ uid: guides
 
 # Guides
 
-Welcome to the guides for ReqRest.
-Guides are supposed to give you both detailed information and step-by-step guides regarding the
-usage of ReqRest.
+Welcome to the detailed guides for ReqRest. <br/>
+These articles are supposed to give you in-depth information about specific details and use cases
+regarding ReqRest.
 
-Please use the sidebar to the left to navigate through the available guides.
+Please use the sidebar to navigate through the available guides.
